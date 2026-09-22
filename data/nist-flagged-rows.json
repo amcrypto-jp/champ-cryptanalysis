@@ -1,0 +1,22 @@
+[
+  {
+    "report": "report_m214m3_64m2m1_512.txt",
+    "line": 186,
+    "text": "  6   3   6   7   5   4   9   5   7   8  0.834308     56/60   *  RandomExcursionsVariant"
+  },
+  {
+    "report": "report_m214m3_m52m62_1024.txt",
+    "line": 63,
+    "text": " 15   5   8   7  12  12  10  11   8  12  0.534146     94/100  *  NonOverlappingTemplate"
+  },
+  {
+    "report": "report_m214m3_m52m62_1024.txt",
+    "line": 123,
+    "text": " 14  11  16   7  10  10   8  10   8   6  0.474986     95/100  *  NonOverlappingTemplate"
+  },
+  {
+    "report": "report_m214m3_m52m62_512.txt",
+    "line": 156,
+    "text": " 12  11  10  11   9   9  12  11   9   6  0.964295     95/100  *  NonOverlappingTemplate"
+  }
+]

@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Mounir IDRASSI (mounir@amcrypto.jp)" />
+  <meta name="dcterms.date" content="2026-09-22" />
+  <title>CHAMP: technical assessment of the submitted specification</title>
+  <style>
+
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+</style>
+  <style type="text/css">:root { color-scheme: light; --ink: #18242d; --accent: #174e67; }
+html { background: #f0f3f5; }
+body { box-sizing: border-box; max-width: 980px; margin: 2rem auto;
+padding: 3.4rem 4rem; background: white; color: var(--ink);
+font: 17px/1.65 Georgia, "DejaVu Serif", serif; }
+header { margin-bottom: 2.5rem; padding-bottom: 1.6rem; border-bottom: 2px solid var(--accent); }
+h1, h2, h3, .subtitle, .author, .date { font-family: "DejaVu Sans", Arial, sans-serif; }
+header h1 { font-size: 2rem; line-height: 1.23; letter-spacing: -0.03em; }
+.subtitle { color: var(--accent); font-size: 1.02rem; }
+.author { font-size: 1.05rem; font-weight: 700; margin-bottom: .2rem; }
+.date { font-size: .9rem; margin-top: .2rem; color: #4b5963; }
+h1:not(.title), h2 { font-size: 1.3rem; line-height: 1.35; margin-top: 2.3rem; color: var(--accent); }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { color: #102e40; }
+p { margin: .9rem 0; }
+table { width: 100%; border-collapse: collapse; margin: 1.4rem 0; font-size: .86rem; line-height: 1.4; }
+th { color: var(--accent); text-align: left; border-top: 2px solid var(--accent); border-bottom: 1px solid #b1bfc8; }
+td, th { padding: .65rem .5rem; vertical-align: top; }
+tbody tr:nth-child(even) { background: #f4f7f9; }
+tbody tr:last-child { border-bottom: 1px solid #b1bfc8; }
+code { font-family: "DejaVu Sans Mono", monospace; font-size: .83em; overflow-wrap: anywhere; }
+pre { padding: 1rem; background: #f3f6f8; overflow-x: auto; line-height: 1.4; }
+.math.display, math[display="block"] { display: block; overflow-x: auto; margin: 1.1rem 0; padding: .2rem 0; }
+math { font-size: 1.03em; }
+li { margin: .7rem 0; }
+@media (max-width: 700px) {
+body { margin: 0; padding: 1.5rem; font-size: 16px; }
+header h1 { font-size: 1.7rem; }
+table { font-size: .76rem; }
+td, th { padding: .45rem .25rem; }
+}
+@media print {
+html { background: white; }
+body { max-width: none; margin: 0; padding: 0; font-size: 10.5pt; }
+a { color: inherit; }
+h1, h2, h3 { break-after: avoid; }
+tr, .math.display { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">CHAMP: technical assessment of the submitted
+specification</h1>
+<p class="subtitle">Independent cryptographic review · Version 1.0.1</p>
+<p class="author">Mounir IDRASSI (<a href="mailto:mounir@amcrypto.jp">mounir@amcrypto.jp</a>)</p>
+<p class="date">22 September 2026</p>
+</header>
+<p><strong>Scope and version.</strong> This report assesses the supplied
+ten-page <em>CHAMP Algorithm Specifications</em>, its four C
+implementations, test vectors and statistical reports. All references to
+specification sections and pages concern that document. Its SHA-256 is
+recorded in the source inventory and in the references below.</p>
+<p>A distinct twelve-page <a href="https://shpilrain.ccny.cuny.edu/Cayley%20hash%20paper.pdf">author-hosted
+preprint</a>, retrieved on 21 September 2026, cites Mullan–Tsaban in
+§6.2. The supplied ten-page specification does not. The criticism here
+concerns the absence of an analysis of the subgroup strategy for the
+implemented determinant-2 pair, not a claim that the authors have never
+cited that work. This report is not a comprehensive review of the
+separate preprint; both document hashes are recorded in <a href="PROVENANCE.md">PROVENANCE.md</a>.</p>
+<p><strong>Independent preparation.</strong> This review’s analysis and
+experiments were completed independently of <a href="https://ngcc.dev/reports/hash-04.html">Saarinen’s report</a> and
+comments signed <a href="https://list.niccs.org.cn/archives/list/crypthashforum@list.niccs.org.cn/message/QNMIAAKIPHG5FEK7QZEE2ZYBOWQHCZUE/">Tsinghua
+Hash Lab</a> and <a href="https://list.niccs.org.cn/archives/list/crypthashforum@list.niccs.org.cn/message/6LSOFTTMTDWFWWRAZDREDYJNG5NXDVEC/">ISCAS</a>.
+The author learned of these sources on 22 September 2026, after
+completing the review and reproducibility package. Their citations
+acknowledge overlap. The subgroup method is credited to Mullan–Tsaban in
+§2.</p>
+<p><strong>Additional contributions.</strong> Relative to the cited
+sources, the independently developed additions are the explicit
+two-stage subgroup search with twelve verified reduced-parameter
+collision certificates (§2); demonstrated prefix/suffix and three-query
+sandwich MAC forgeries, and related-digest recovery (§4); a 40-bit
+preimage recovery using full CHAMP-1024 parameters (§5); and
+digest-length, initialization and timing findings (§7). The determinant
+bound, collision-search direction, identity example, serialization
+mismatch, statistical rows and KAT checks overlap with the cited
+analyses; see <a href="FINDINGS.md">FINDINGS.md</a>.</p>
+<p><strong>Recommendation.</strong> The submission does not presently
+justify adoption as a general-purpose cryptographic hash. The main
+concerns are an applicable subgroup collision-search strategy missing
+from the security analysis, complete forgery of several naive keyed
+constructions, substantial restrictions on digest use, and unsupported
+security arguments. The specification and implementations also disagree
+on serialization, and the statistical reports do not support the
+statement that every test passed.</p>
+<p>The evidence has important limits: this assessment demonstrates
+full-parameter forgeries against specified MAC constructions and
+recovery of a short preimage, but <strong>does not exhibit a practical
+full-parameter collision, a distinct second preimage, or recovery of a
+uniformly random long message from one digest</strong>. Collision-cost
+projections below identify their assumptions. The supplied specification
+does not assign explicit numerical work factors to each security
+property; this report does not infer such claims from digest size
+alone.</p>
+<h1 id="construction-and-independently-checked-implementation-behavior">1.
+Construction and independently checked implementation behavior</h1>
+<p>Write</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>2</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>4</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>3</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi>B</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>5</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>6</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi>M</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mn>1</mn></msub><mi>…</mi><msub><mi>x</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mi>G</mi><msub><mi>x</mi><mn>1</mn></msub></msub><mi>⋯</mi><msub><mi>G</mi><msub><mi>x</mi><mi>n</mi></msub></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">
+A=\begin{pmatrix}-2&amp;1\\4&amp;-3\end{pmatrix},\qquad
+B=\begin{pmatrix}-5&amp;2\\-6&amp;2\end{pmatrix},\qquad
+M(x_1\ldots x_n)=G_{x_1}\cdots G_{x_n},
+</annotation></semantics></math></p>
+<p>where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mn>0</mn></msub><mo>=</mo><mi>A</mi></mrow><annotation encoding="application/x-tex">G_0=A</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mn>1</mn></msub><mo>=</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">G_1=B</annotation></semantics></math>,
+and arithmetic is modulo
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>.
+CHAMP-512 uses
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><msup><mn>2</mn><mn>128</mn></msup><mo>−</mo><mn>15449</mn></mrow><annotation encoding="application/x-tex">p=2^{128}-15449</annotation></semantics></math>;
+CHAMP-1024 uses
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><msup><mn>2</mn><mn>256</mn></msup><mo>−</mo><mn>36113</mn></mrow><annotation encoding="application/x-tex">p=2^{256}-36113</annotation></semantics></math>.
+Both generators have determinant 2. The digest is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>M</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">H(X)=E(M(X))</annotation></semantics></math>,
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>E</mi><annotation encoding="application/x-tex">E</annotation></semantics></math>
+inverts each nonzero entry, leaves zero unchanged, and serializes the
+entries in column order. On canonical field encodings,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>E</mi><annotation encoding="application/x-tex">E</annotation></semantics></math>
+is a publicly invertible bijection. Let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><msup><mi>E</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">D=E^{-1}</annotation></semantics></math>.</p>
+<p>An independent model reproduced all 4,097 short-message vectors for
+each variant and agreed with both the reference and optimized C
+implementations: 8,194 vectors checked against two implementations
+apiece. Eight large all-zero/all-one vectors were independently checked
+by matrix exponentiation. The large DRBG-expanded and million-iteration
+loop vectors were not rerun in this assessment. <a href="REPRODUCING.md">Reproduction code and coverage</a>, <a href="evidence/reproduce-full.log">run transcript</a>.</p>
+<p>The Julia listing on PDF p. 5 writes each field element in big-endian
+byte order. All four C implementations and the KATs use little-endian
+byte order. Section 5 does not resolve that choice explicitly. This is
+an interoperability defect: even the one-bit message <code>1</code>
+yields different byte strings. The findings below apply under either
+convention; the demonstrations use the C/KAT convention.</p>
+<h1 id="a-subgroup-collision-search-strategy">2. A subgroup
+collision-search strategy</h1>
+<p>Mullan and Tsaban give a subgroup-based approach to short collisions
+in matrix homomorphic hashes. Their general-case square-root estimate is
+heuristic. It is materially more relevant than inferring an attack
+merely from membership in a previously studied family. <a href="https://arxiv.org/abs/1306.5646">Mullan–Tsaban, §4</a>.</p>
+<p>For CHAMP’s implemented pair, the following adaptation works directly
+with determinant-2 matrices; no conversion of unequal-length collisions
+from an
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><msub><mi>L</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">SL_2</annotation></semantics></math>
+construction is needed. Put</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>3</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><msup><mi>P</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>A</mi><mi>P</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>4</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>C</mi><mo>,</mo><mspace width="1.0em"></mspace><msup><mi>P</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>B</mi><mi>P</mi><mo>=</mo><mrow><mi mathvariant="normal">diag</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1</mn><mo>,</mo><mi>−</mi><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>F</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+P=\begin{pmatrix}1&amp;2\\2&amp;3\end{pmatrix},\quad
+P^{-1}AP=\begin{pmatrix}-4&amp;1\\2&amp;-1\end{pmatrix}=C,\quad
+P^{-1}BP=\operatorname{diag}(-1,-2)=F.
+</annotation></semantics></math></p>
+<p>These are integer identities and hold at both full parameter sets.
+Conjugation preserves products and collisions.</p>
+<p>First find a positive bitstring
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>w</mi><annotation encoding="application/x-tex">w</annotation></semantics></math>,
+containing a zero, whose conjugated product
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>
+is upper triangular. This can be searched by matching projective
+points</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo stretchy="false" form="prefix">(</mo><mi>u</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>∞</mi><mo>=</mo><mi>M</mi><mo stretchy="false" form="prefix">(</mo><mi>v</mi><mo stretchy="false" form="postfix">)</mo><mi>∞</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">
+M(u)^{-1}\infty=M(v)\infty,
+</annotation></semantics></math></p>
+<p>where products in this paragraph use
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>,</mo><mi>F</mi></mrow><annotation encoding="application/x-tex">C,F</annotation></semantics></math>,
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∞</mi><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo>:</mo><mn>0</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\infty=[1:0]</annotation></semantics></math>.
+A match makes
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo stretchy="false" form="prefix">(</mo><mi>u</mi><mi>v</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">M(uv)</annotation></semantics></math>
+upper triangular. Only the search computation uses inverses: the output
+word is the ordinary positive word
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">uv</annotation></semantics></math>.
+There are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">p+1</annotation></semantics></math>
+projective points. If the sampled point distributions mix adequately,
+two lists of approximately
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msqrt><mi>p</mi></msqrt><annotation encoding="application/x-tex">\sqrt p</annotation></semantics></math>
+words suffice.</p>
+<p>Now multiply the two upper triangular matrices
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo>,</mo><mi>T</mi></mrow><annotation encoding="application/x-tex">F,T</annotation></semantics></math>.
+For</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>a</mi></mtd><mtd columnalign="center" style="text-align: center"><mi>b</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>d</mi></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi>S</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>e</mi></mtd><mtd columnalign="center" style="text-align: center"><mi>f</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>h</mi></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">
+R=\begin{pmatrix}a&amp;b\\0&amp;d\end{pmatrix},\qquad
+S=\begin{pmatrix}e&amp;f\\0&amp;h\end{pmatrix},
+</annotation></semantics></math></p>
+<p>direct multiplication gives</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>S</mi><mo>=</mo><mi>S</mi><mi>R</mi><mspace width="1.0em"></mspace><mo>⇔</mo><mspace width="1.0em"></mspace><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>a</mi><mo>−</mo><mi>d</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>b</mi><mo stretchy="false" form="prefix">(</mo><mi>e</mi><mo>−</mo><mi>h</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+RS=SR\quad\Longleftrightarrow\quad f(a-d)=b(e-h).
+</annotation></semantics></math></p>
+<p>For nonzero off-diagonal entries, matching the field value
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>a</mi><mo>−</mo><mi>d</mi><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mi>b</mi></mrow><annotation encoding="application/x-tex">(a-d)/b</annotation></semantics></math>
+therefore finds commuting products. Diagonal matrices commute with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math>
+and can be handled separately. A birthday search on these codes costs
+approximately
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msqrt><mi>p</mi></msqrt><annotation encoding="application/x-tex">\sqrt p</annotation></semantics></math>
+samples under a corresponding mixing assumption. Expand the two
+resulting words back into original CHAMP bitstrings
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>,</mo><mi>s</mi></mrow><annotation encoding="application/x-tex">r,s</annotation></semantics></math>,
+and verify
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mi>s</mi><mo>≠</mo><mi>s</mi><mi>r</mi></mrow><annotation encoding="application/x-tex">rs\ne sr</annotation></semantics></math>.
+The resulting collision satisfies</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo stretchy="false" form="prefix">(</mo><mi>r</mi><mi>s</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>M</mi><mo stretchy="false" form="prefix">(</mo><mi>s</mi><mi>r</mi><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><mo stretchy="false" form="prefix">|</mo><mi>r</mi><mi>s</mi><mo stretchy="false" form="prefix">|</mo><mo>=</mo><mo stretchy="false" form="prefix">|</mo><mi>s</mi><mi>r</mi><mo stretchy="false" form="prefix">|</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+M(rs)=M(sr),\qquad |rs|=|sr|.
+</annotation></semantics></math></p>
+<p>This construction automatically respects the determinant constraint.
+It produces an actual collision, not an identity word or a relation
+requiring inverse letters in the message.</p>
+<p>Our <a href="code/subgroup.py">implementation</a> produced twelve
+distinct equal-length collision pairs at reduced field sizes, using safe
+primes congruent to 7 modulo 8. The three runs at each size used the
+following total sample counts across the two stages:</p>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 25%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Field bits</th>
+<th style="text-align: right;">Prime</th>
+<th style="text-align: left;">Total samples, three seeds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">16</td>
+<td style="text-align: right;">65,063</td>
+<td style="text-align: left;">639; 667; 634</td>
+</tr>
+<tr>
+<td style="text-align: left;">20</td>
+<td style="text-align: right;">1,048,343</td>
+<td style="text-align: left;">1,691; 3,770; 2,357</td>
+</tr>
+<tr>
+<td style="text-align: left;">24</td>
+<td style="text-align: right;">16,774,679</td>
+<td style="text-align: left;">11,880; 9,224; 8,007</td>
+</tr>
+<tr>
+<td style="text-align: left;">28</td>
+<td style="text-align: right;">268,434,263</td>
+<td style="text-align: left;">30,771; 33,867; 39,728</td>
+</tr>
+</tbody>
+</table>
+<p>Every pair was recomputed with the original generators and
+finalization. A separate verifier recomputed the complete products over
+the integers before reducing modulo each prime; it also confirmed that
+these particular pairs do not collide at either full parameter set.
+Complete messages, digests, seeds and timings are retained in <a href="data/collisions.json">collision certificates</a>. These examples
+test the mechanism; they do not prove its asymptotic cost or full-size
+mixing assumptions.</p>
+<p>With words of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>p</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">O(\log p)</annotation></semantics></math>
+symbols at each stage, the demonstrated approach suggests
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false" form="prefix">(</mo><msqrt><mi>p</mi></msqrt><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>p</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">O(\sqrt p\log p)</annotation></semantics></math>
+field work, approximately
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msqrt><mi>p</mi></msqrt><annotation encoding="application/x-tex">\sqrt p</annotation></semantics></math>
+stored records up to polynomial factors, and messages of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false" form="prefix">(</mo><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>p</mi><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">O((\log p)^2)</annotation></semantics></math>
+bits. The leading exponential work factors would be
+<strong><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
+for CHAMP-512 and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>128</mn></msup><annotation encoding="application/x-tex">2^{128}</annotation></semantics></math>
+for CHAMP-1024</strong>, subject to those assumptions. These are neither
+measured full-parameter attacks nor established lower bounds. The
+authors should address this strategy explicitly before assigning
+security levels.</p>
+<h1 id="what-follows-unconditionally-from-the-determinant">3. What
+follows unconditionally from the determinant</h1>
+<p>For an
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>-bit
+message,</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">det</mi><mo>⁡</mo></mrow><mi>M</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mn>2</mn><mi>n</mi></msup><mrow><mspace width="0.222em"></mspace><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">mod</mi><mo>⁡</mo></mrow><mspace width="0.222em"></mspace><mi>p</mi><mo stretchy="false" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\det M(X)=2^n\pmod p.
+</annotation></semantics></math></p>
+<p>Consequently, outputs at a fixed length occupy at most</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mo stretchy="false" form="prefix">|</mo><mi>S</mi><msub><mi>L</mi><mn>2</mn></msub><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="double-struck">𝔽</mi><mi>p</mi></msub><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="prefix">|</mo><mo>=</mo><mi>p</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>p</mi><mn>2</mn></msup><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
+S=|SL_2(\mathbb F_p)|=p(p^2-1)
+</annotation></semantics></math></p>
+<p>matrices, regardless of which subgroup the generators produce. A
+proof that the generators generate a large group would not imply that
+every matrix in this coset occurs at a particular length.</p>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Result</th>
+<th style="text-align: center;">CHAMP-512</th>
+<th style="text-align: center;">CHAMP-1024</th>
+<th style="text-align: left;">Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Fixed-length range bound</td>
+<td style="text-align: center;">Less than
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>384</mn></msup><annotation encoding="application/x-tex">2^{384}</annotation></semantics></math></td>
+<td style="text-align: center;">Less than
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>768</mn></msup><annotation encoding="application/x-tex">2^{768}</annotation></semantics></math></td>
+<td style="text-align: left;">Exact counting bound</td>
+</tr>
+<tr>
+<td style="text-align: left;">Classical birthday collision search</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false" form="prefix">(</mo><msup><mn>2</mn><mn>192</mn></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">O(2^{192})</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false" form="prefix">(</mo><msup><mn>2</mn><mn>384</mn></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">O(2^{384})</annotation></semantics></math></td>
+<td style="text-align: left;">Generic baseline; choose a domain with at
+least
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>S</mi></mrow><annotation encoding="application/x-tex">2S</annotation></semantics></math>
+messages</td>
+</tr>
+<tr>
+<td style="text-align: left;">Some equal-length collision must exist
+by</td>
+<td style="text-align: center;">384 input bits</td>
+<td style="text-align: center;">768 input bits</td>
+<td style="text-align: left;">Pigeonhole principle; does not locate the
+pair</td>
+</tr>
+<tr>
+<td style="text-align: left;">Subgroup collision search</td>
+<td style="text-align: center;">About
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math></td>
+<td style="text-align: center;">About
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>128</mn></msup><annotation encoding="application/x-tex">2^{128}</annotation></semantics></math></td>
+<td style="text-align: left;">Leading exponential factors only; mixing
+assumptions from item 2</td>
+</tr>
+</tbody>
+</table>
+<p>The first three rows are independent of the subgroup heuristic. The
+birthday row assumes sampling at a length with at least
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>S</mi></mrow><annotation encoding="application/x-tex">2S</annotation></semantics></math>
+distinct possible messages and discarding repeated inputs; it is not a
+bound for a nearly injective short-message domain. The pigeonhole
+lengths are 384 and 768, since the range sizes are already strictly
+smaller than the corresponding powers of two.</p>
+<p>Let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>p</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">q=(p-1)/2</annotation></semantics></math>.
+Proof-enabled primality checks confirmed that both
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>,</mo><mi>q</mi></mrow><annotation encoding="application/x-tex">p,q</annotation></semantics></math>
+are prime, and excluded every larger candidate safe prime at each size.
+Since
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>≡</mo><mn>7</mn><mrow><mspace width="0.222em"></mspace><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">mod</mi><mo>⁡</mo></mrow><mspace width="0.222em"></mspace><mn>8</mn><mo stretchy="false" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">p\equiv7\pmod8</annotation></semantics></math>,
+2 has order
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math>.
+Thus a collision implies</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><mi>X</mi><mo stretchy="false" form="prefix">|</mo><mo>≡</mo><mo stretchy="false" form="prefix">|</mo><mi>Y</mi><mo stretchy="false" form="prefix">|</mo><mrow><mspace width="0.222em"></mspace><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">mod</mi><mo>⁡</mo></mrow><mspace width="0.222em"></mspace><mi>q</mi><mo stretchy="false" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+|X|\equiv |Y|\pmod q.
+</annotation></semantics></math></p>
+<p>This is a valid and useful exclusion of different-length collisions
+within a range of width less than
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math>.
+It does not address same-length collision search.</p>
+<p>Two corrections are needed in the specification’s statements on PDF
+pp. 4–5. Equality gives
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mrow><mo stretchy="false" form="prefix">|</mo><mi>X</mi><mo stretchy="false" form="prefix">|</mo><mi>−</mi><mo stretchy="false" form="prefix">|</mo><mi>Y</mi><mo stretchy="false" form="prefix">|</mo></mrow></msup><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^{|X|-|Y|}=1</annotation></semantics></math>;
+allowing
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>±</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">\pm1</annotation></semantics></math>
+is an unnecessarily weak condition, rather than a contradiction. An
+identity word has length divisible by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math>,
+not necessarily equal to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math>
+or exactly
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>255</mn></msup><annotation encoding="application/x-tex">2^{255}</annotation></semantics></math>.</p>
+<p>For CHAMP-1024,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>A</mi><mi>q</mi></msup><mo>=</mo><mi>I</mi></mrow><annotation encoding="application/x-tex">A^q=I</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><msup><mn>2</mn><mn>255</mn></msup><mo>−</mo><mn>18057</mn></mrow><annotation encoding="application/x-tex">q=2^{255}-18057</annotation></semantics></math>.
+The symbolic messages
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>0</mn><mi>q</mi></msup><annotation encoding="application/x-tex">0^q</annotation></semantics></math>
+therefore contradict the literal assertion of no different-length
+collisions with difference less than
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>255</mn></msup><annotation encoding="application/x-tex">2^{255}</annotation></semantics></math>.
+Matrix exponentiation verifies the identity; the enormous message has
+not been expanded, and this is not a practical attack. The correct
+threshold is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math>.</p>
+<p>The two variants must also be distinguished. At 256 field bits,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">ord</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>A</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>q</mi></mrow><annotation encoding="application/x-tex">\operatorname{ord}(A)=q</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">ord</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>B</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>2</mn><mi>q</mi></mrow><annotation encoding="application/x-tex">\operatorname{ord}(B)=2q</annotation></semantics></math>.
+At 128 field bits, 17 is a quadratic <strong>nonresidue</strong>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>
+is nonsplit, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>A</mi><mi>q</mi></msup><mo>≠</mo><mi>I</mi></mrow><annotation encoding="application/x-tex">A^q\ne I</annotation></semantics></math>,
+while
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">ord</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>B</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>2</mn><mi>q</mi></mrow><annotation encoding="application/x-tex">\operatorname{ord}(B)=2q</annotation></semantics></math>
+still holds. The alternative matrix with trace 5 has the same
+discriminant 17 and the same splitting distinction. Arguments requiring
+split generators therefore need separate treatment at the two sizes. <a href="evidence/parameters.log">Parameter proofs and transcript</a>.</p>
+<p>The determinant also exposes length modulo
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math>.
+If the length lies in a known interval of width
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>&lt;</mo><mi>q</mi></mrow><annotation encoding="application/x-tex">L&lt;q</annotation></semantics></math>,
+bounded discrete-log methods recover it in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false" form="prefix">(</mo><msqrt><mi>L</mi></msqrt><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">O(\sqrt L)</annotation></semantics></math>
+group operations, with an appropriate time–memory tradeoff. Testing a
+proposed length takes a modular exponentiation. Unbounded exact length
+recovery does not follow. Length hiding is an application requirement,
+not a universal hash-function requirement.</p>
+<h1 id="exact-failures-of-particular-keyed-constructions">4. Exact
+failures of particular keyed constructions</h1>
+<p>The public combination rule is</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mi>Y</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>D</mi><mo stretchy="false" form="prefix">(</mo><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo><mi>D</mi><mo stretchy="false" form="prefix">(</mo><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+H(XY)=E(D(H(X))D(H(Y))).
+</annotation></semantics></math></p>
+<p>For a naive prefix MAC
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>K</mi><mi>m</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">t=H(Km)</annotation></semantics></math>,
+one known message–tag pair reveals an equivalent key matrix:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mi>D</mi><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mi>M</mi><mo stretchy="false" form="prefix">(</mo><mi>m</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo>=</mo><mi>M</mi><mo stretchy="false" form="prefix">(</mo><mi>K</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+L=D(t)M(m)^{-1}=M(K).
+</annotation></semantics></math></p>
+<p>For any chosen replacement
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>m</mi><mo>′</mo></msup><annotation encoding="application/x-tex">m&#39;</annotation></semantics></math>,
+the attacker returns
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false" form="prefix">(</mo><mi>L</mi><mi>M</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>m</mi><mo>′</mo></msup><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">E(LM(m&#39;))</annotation></semantics></math>.
+This is universal message forgery after one observed tag, without
+recovering the key bits or knowing their length. It works for
+replacements of the same length, so requiring a fixed message length
+does not fix this construction. A suffix MAC
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>m</mi><mi>K</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">H(mK)</annotation></semantics></math>
+fails similarly by multiplying by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo stretchy="false" form="prefix">(</mo><mi>m</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">M(m)^{-1}</annotation></semantics></math>
+on the left.</p>
+<p>Adding a fixed secret suffix as well as a prefix is insufficient.
+Suppose decoded tags have the form
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo stretchy="false" form="prefix">(</mo><mi>m</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>L</mi><mi>M</mi><mo stretchy="false" form="prefix">(</mo><mi>m</mi><mo stretchy="false" form="postfix">)</mo><mi>R</mi></mrow><annotation encoding="application/x-tex">T(m)=L M(m)R</annotation></semantics></math>.
+Query tags for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϵ</mi><mo>,</mo><mn>0</mn><mo>,</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\epsilon,0,1</annotation></semantics></math>.
+Then</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mi>T</mi><mo stretchy="false" form="prefix">(</mo><mi>ϵ</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo>=</mo><mi>L</mi><mi>A</mi><msup><mi>L</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo>,</mo><mspace width="2.0em"></mspace><mi>T</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mi>T</mi><mo stretchy="false" form="prefix">(</mo><mi>ϵ</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo>=</mo><mi>L</mi><mi>B</mi><msup><mi>L</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">
+T(0)T(\epsilon)^{-1}=LAL^{-1},\qquad
+T(1)T(\epsilon)^{-1}=LBL^{-1}.
+</annotation></semantics></math></p>
+<p>Multiplying these known conjugated generators according to a new
+message and then multiplying by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo stretchy="false" form="prefix">(</mo><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">T(\epsilon)</annotation></semantics></math>
+produces its valid tag. These attacks were checked against all four
+shipped C implementations. These constructions are assessed as potential
+uses of CHAMP, not as MAC schemes expressly proposed in the
+specification. The results are not an analysis of HMAC or every possible
+keyed construction.</p>
+<p>For public digests, if
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">H(X)</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mi>b</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">H(Xb)</annotation></semantics></math>
+are both disclosed, then</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo stretchy="false" form="prefix">(</mo><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>D</mi><mo stretchy="false" form="prefix">(</mo><mi>H</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mi>b</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mi>G</mi><mi>b</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">
+D(H(X))^{-1}D(H(Xb))=G_b.
+</annotation></semantics></math></p>
+<p>This recovers the appended bit exactly at any prefix length. The
+demonstrations recover all 5,000 bits from 5,001 consecutive digests in
+the independent model and check recovery of bit 5,000 using each C
+implementation. This identifies a confidentiality hazard <strong>when
+such related digests are published</strong>. Streaming computation
+itself does not require publishing intermediate digests. This attack
+therefore does not refute the distinct single-digest prediction claim in
+§7.1(2); that claim still needs a precise input distribution and
+security experiment.</p>
+<p>Public digest combination also does not, by itself, break commitment
+binding or file integrity against a protected digest. Changing a
+commitment value is not opening the same commitment two ways.
+Recomputing a digest for a modified file does not make it equal an
+authenticated original digest. Any claimed protocol failure must specify
+what the adversary may change and what the verifier trusts.</p>
+<h1 id="short-input-recovery-and-preimage-search-bounds">5. Short-input
+recovery and preimage-search bounds</h1>
+<p>For a target matrix
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>
+known to hash an
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>-bit
+input, split a candidate as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">uv</annotation></semantics></math>,
+with lengths as close as possible to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">m/2</annotation></semantics></math>.
+Store
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo stretchy="false" form="prefix">(</mo><mi>u</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">M(u)</annotation></semantics></math>,
+and look up</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mi>M</mi><mo stretchy="false" form="prefix">(</mo><mi>v</mi><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">
+T M(v)^{-1}.
+</annotation></semantics></math></p>
+<p>This finds an
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>-bit
+preimage using
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false" form="prefix">(</mo><msup><mn>2</mn><mrow><mi>m</mi><mi>/</mi><mn>2</mn></mrow></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">O(2^{m/2})</annotation></semantics></math>
+stored values and operations up to polynomial factors. It works directly
+modulo
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>;
+no lifting to integers or assumption about entry growth is required. Our
+independent implementation recovered a 40-bit input from its CHAMP-1024
+digest in about 6 seconds on the recorded environment. That timing
+describes this run, not a universal practical cutoff. A second
+demonstration succeeds after integer wrap at a reduced prime. <a href="evidence/reproduce-full.log">Transcript</a>.</p>
+<p>The distinction from exhaustive guessing is significant: a generic
+random hash of a uniformly chosen 40-bit input normally requires
+searching roughly
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>40</mn></msup><annotation encoding="application/x-tex">2^{40}</annotation></semantics></math>
+possibilities. Nevertheless, this example does not recover arbitrary
+128-bit or long high-entropy inputs in practical time.</p>
+<p>Integer exposure is a separate observation. Recovering centered
+matrix entries exposes the exact integer product only when all original
+entries lie in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mi>−</mi><mo stretchy="false" form="prefix">⌊</mo><mi>p</mi><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">⌋</mo><mo>,</mo><mo stretchy="false" form="prefix">⌊</mo><mi>p</mi><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">⌋</mo><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[-\lfloor p/2\rfloor,\lfloor p/2\rfloor]</annotation></semantics></math>.
+Random samples cannot establish a universal no-wrap threshold. In
+particular, all-zero inputs leave this interval at <strong>59 bits for
+CHAMP-512 and 117 bits for CHAMP-1024</strong>, providing a worst-case
+counterexample to any larger universal centered-lifting threshold.
+Exposure of a matrix is also not automatically efficient recovery of its
+word factorization.</p>
+<p>Two further distinctions are essential:</p>
+<ul>
+<li>A preimage algorithm may return the original message. It is not a
+second-preimage attack unless it finds a different message. All 4,096
+twelve-bit messages have distinct products at both full parameter sets
+in our exhaustive check; the meet-in-the-middle search in that domain
+returns the original. The determinant also excludes different feasible
+lengths for a second preimage of these targets.</li>
+<li>A saturated
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false" form="prefix">(</mo><msqrt><mi>S</mi></msqrt><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">O(\sqrt S)</annotation></semantics></math>
+target-preimage estimate needs sufficiently long halves and suitably
+spread forward/backward distributions, so that sampled lists intersect
+at the target. Range cardinality alone does not prove this estimate for
+every length or target. A toy success does not supply the missing
+hypothesis.</li>
+</ul>
+<p>Quantum estimates need a specified resource model. In particular, the
+two split searches form a claw-finding problem on domains of size about
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mrow><mi>m</mi><mi>/</mi><mn>2</mn></mrow></msup><annotation encoding="application/x-tex">2^{m/2}</annotation></semantics></math>.
+Applying Tani’s algorithm yields
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false" form="prefix">(</mo><msup><mn>2</mn><mrow><mi>m</mi><mi>/</mi><mn>3</mn></mrow></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">O(2^{m/3})</annotation></semantics></math>
+quantum queries to these product functions, with reversible evaluation
+and substantial quantum storage requirements. This is an inference from
+that algorithm, not a tested quantum implementation. <a href="https://arxiv.org/abs/0708.2584">Tani, Corollary 9</a>. Standard
+BHT collision estimates also require their oracle and balance
+assumptions to be stated. <a href="https://arxiv.org/abs/quant-ph/9705002">Brassard–Høyer–Tapp</a>.
+No optimal quantum security level is established here.</p>
+<h1 id="statistical-appearance-security-arguments-and-graph-terminology">6.
+Statistical appearance, security arguments, and graph terminology</h1>
+<p>A single digest at a known length admits a strong structural test:
+reject noncanonical field words, decode, and test determinant
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mi>n</mi></msup><annotation encoding="application/x-tex">2^n</annotation></semantics></math>.
+CHAMP always passes. A uniformly random
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mi>b</mi></mrow><annotation encoding="application/x-tex">4b</annotation></semantics></math>-bit
+string passes with probability exactly</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>p</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>p</mi><mn>2</mn></msup><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><msup><mn>2</mn><mrow><mn>4</mn><mi>b</mi></mrow></msup></mfrac><mo>≈</mo><msup><mn>2</mn><mrow><mi>−</mi><mi>b</mi></mrow></msup><mo>,</mo><mspace width="2.0em"></mspace><mi>b</mi><mo>=</mo><mrow><mi mathvariant="normal">bitlength</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>p</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\frac{p(p^2-1)}{2^{4b}}\approx 2^{-b},\qquad b=\operatorname{bitlength}(p).
+</annotation></semantics></math></p>
+<p>Thus statistical test-suite success would not make these digests
+behave as uniform random outputs. A three-query concatenation test is
+also possible; conditional on two valid decoded outputs, matching their
+encoded product in a fresh random
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>-bit
+oracle response has probability
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mrow><mi>−</mi><mi>k</mi></mrow></msup><annotation encoding="application/x-tex">2^{-k}</annotation></semantics></math>.
+These properties prevent directly transferring a random-oracle argument
+without examining its use of the hash. They do not imply that every
+protocol with a random-oracle proof is insecure.</p>
+<p>The supplied NIST reports themselves contain four marked
+failures:</p>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 10%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Report</th>
+<th style="text-align: right;">Line</th>
+<th style="text-align: left;">Marked result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Primary pair, 512-bit digest</td>
+<td style="text-align: right;">156</td>
+<td style="text-align: left;">NonOverlappingTemplate, 95/100</td>
+</tr>
+<tr>
+<td style="text-align: left;">Primary pair, 1024-bit digest</td>
+<td style="text-align: right;">63</td>
+<td style="text-align: left;">NonOverlappingTemplate, 94/100</td>
+</tr>
+<tr>
+<td style="text-align: left;">Primary pair, 1024-bit digest</td>
+<td style="text-align: right;">123</td>
+<td style="text-align: left;">NonOverlappingTemplate, 95/100</td>
+</tr>
+<tr>
+<td style="text-align: left;">Alternative pair, 512-bit digest</td>
+<td style="text-align: right;">186</td>
+<td style="text-align: left;">RandomExcursionsVariant, 56/60</td>
+</tr>
+</tbody>
+</table>
+<p>Exact filenames, source hashes and the four flagged rows are recorded
+in the <a href="PROVENANCE.md">source inventory</a> and <a href="data/nist-flagged-rows.json">row extracts</a>. The two
+primary-pair reports state a minimum acceptable ordinary-test count of
+approximately 96/100. The authors should reconcile these records with
+the claim that all tests passed. Some failures are expected when many
+statistical tests are applied; their presence alone does not prove an
+exploitable bias. More fundamentally, statistical tests cannot replace
+cryptanalysis. <a href="https://csrc.nist.gov/pubs/sp/800/22/r1/upd1/final">NIST SP 800-22
+Rev. 1a</a>.</p>
+<p>Testing 100 streams of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>10</mn><mn>6</mn></msup><annotation encoding="application/x-tex">10^6</annotation></semantics></math>
+bits uses 12.5 MB. This is compatible with generating at least 100 MB
+and testing a subset. The exact generated amount, tested subset, counter
+encoding and testing procedure should be documented.</p>
+<p>The length-attack defense on PDF p. 7 does not establish resistance.
+A large canonical representative of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mrow><mi>−</mi><mn>1</mn></mrow></msup><annotation encoding="application/x-tex">2^{-1}</annotation></semantics></math>
+says little about whether applying the <strong>correct</strong> inverse
+factor recovers a smaller integer predecessor. Nor does the sign of an
+average-matrix eigenvalue control the norm of an individual product.
+Replacing both generators by their negatives changes an
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>-factor
+product only by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">(-1)^n</annotation></semantics></math>,
+leaving every absolute-entry norm unchanged, while reversing the signs
+of the average matrix’s eigenvalues. Furthermore,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">𝔼</mi><mo stretchy="false" form="prefix">[</mo><msub><mi>M</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">]</mo><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mo stretchy="false" form="prefix">(</mo><mi>A</mi><mo>+</mo><mi>B</mi><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>2</mn><msup><mo stretchy="false" form="postfix">)</mo><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">\mathbb E[M_n]=((A+B)/2)^n</annotation></semantics></math>
+concerns signed entries, not
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">𝔼</mi><mo stretchy="false" form="prefix">[</mo><mo stretchy="false" form="postfix">∥</mo><msub><mi>M</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">∥</mo><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\mathbb E[\|M_n\|]</annotation></semantics></math>,
+typical growth, or a predictor’s success probability. The displayed
+plots do not supply those missing analyses.</p>
+<p>The term <em>girth</em> must be defined. A positive collision gives
+two directed paths with a common endpoint, but closing one path by the
+reverse of the other uses inverse edges. It bounds a cycle in the
+underlying undirected graph, not necessarily a directed identity cycle.
+Indeed, for the CHAMP-1024 primary pair the directed girth is exactly
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math>:
+determinants rule out shorter positive identity words, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>A</mi><mi>q</mi></msup><mo>=</mo><mi>I</mi></mrow><annotation encoding="application/x-tex">A^q=I</annotation></semantics></math>
+supplies one. This can coexist with same-length collisions forced by
+counting at 768 bits. Neither a large directed girth nor a counting
+upper bound for a different graph resolves the actual collision-search
+problem.</p>
+<p>The integer-lifting discussion on PDF p. 6 also needs care with
+signed entries. Two different integers can both have absolute value less
+than
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
+and still be equal modulo
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>:
+1 and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">1-p</annotation></semantics></math>
+are an example. A sufficient no-aliasing condition is that each
+coordinate lies in a common interval of width less than
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>,
+such as the centered interval used above. Freeness over the integers and
+a valid coordinate bound are separate requirements for such a modular
+collision exclusion.</p>
+<p>A bounded search without an integer relation does not prove freeness.
+Conversely, lack of a freeness proof is not itself a collision attack. A
+credible security analysis must address the actual parameters and
+message domain.</p>
+<h1 id="implementation-and-feature-claims">7. Implementation and feature
+claims</h1>
+<p>All four <code>CryptHash</code> implementations ignore
+<code>digest_len_bits</code>. For example, asking the CHAMP-1024
+implementation for 512 bits still returns success and writes 1,024 bits.
+A guarded-buffer test confirms this behavior without making an
+out-of-bounds access. The API should reject unsupported lengths and
+document output capacity.</p>
+<p>All four implementations lazily initialize global byte tables using
+an unsynchronized ready flag. Concurrent first calls can race on these
+shared objects under the C memory model. This is a source-level finding,
+not a reproduced erroneous digest. Constant tables or properly
+synchronized initialization would remove that concern.</p>
+<p>The implementation is not established to be constant-time. Its memory
+accesses use message bytes as table indices, and arithmetic contains
+data-dependent control flow. A public exponent fixes an exponentiation
+schedule, not the timing of every arithmetic operation. Hash inputs may
+be confidential in some applications. No timing or cache attack is
+demonstrated here. Implementations intended for confidential inputs need
+a separate side-channel assessment.</p>
+<p>Streaming without knowing the final length is already supported by
+SHA-family hashing: complete blocks can be processed as they arrive and
+padding added at the end. CHAMP’s public digest-combination rule is a
+different functionality. The feature comparison in §§2 and 4 should
+distinguish them. <a href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf">FIPS
+180-4, §5.1</a>.</p>
+<p>The paper’s own Table 1 reports lower single-thread throughput than
+SHA-512; exploiting more cores is a separate resource comparison. No new
+throughput benchmark is claimed here. Breaking public homomorphism is
+not a necessary condition for collision resistance, and conventional
+streaming or parallel hashing does not inherently require publishing a
+composable final digest.</p>
+<p><strong>Requested revisions before reconsideration.</strong> State
+separate collision, preimage and second-preimage targets; specify input
+distributions, message limits and classical/quantum resource models;
+address the subgroup strategy and its mixing assumptions; formalize the
+single-digest bit-prediction claim; limit proposed uses to analyzed
+constructions; correct the determinant statements and serialization;
+reconcile the statistical reports; and repair or document the API and
+concurrency behavior. Any revised finalization must be analyzed as part
+of the construction: simply hashing the matrix again cannot remove
+collisions already present in the matrix product.</p>
+<p>The accompanying <a href="REPRODUCING.md">reproduction guide</a> maps
+the computations to source code, complete collision certificates and
+recorded transcripts. The <a href="PROVENANCE.md">source inventory</a>
+identifies the exact reviewed inputs and version boundaries. The <a href="FINDINGS.md">findings index</a> separates algebraic results,
+experiments, projections and source-level observations.</p>
+<p><strong>AI-use disclosure.</strong> Moonshot AI’s kimi-k3 was used
+for the main review. OpenAI’s GPT-6 Astra was used for polishing and
+preparing the publication package, including additional technical
+analysis, cross-checking of claims, and development of reproducibility
+code. Mounir IDRASSI is responsible for the final report and its
+conclusions.</p>
+<p><strong>License.</strong> Copyright © 2026 Mounir IDRASSI for the
+original contributions. This report and its original results are
+licensed under <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
+Attribution 4.0 International (CC BY 4.0)</a>. The accompanying code is
+licensed under the <a href="LICENSE">MIT License</a>. Third-party
+material retains its existing terms; see <a href="LICENSING.md">LICENSING.md</a> for the scope.</p>
+<h1 id="references-and-reproducibility">8. References and
+reproducibility</h1>
+<ol type="1">
+<li><p>CHAMP submitters. <em>CHAMP: Cayley HAshing with Matrix Products
+— Algorithm Specifications</em>. Supplied ten-page specification,
+undated. Reviewed file: <code>CHAMP Algorithm Specifications.pdf</code>.
+SHA-256, split over two lines for readability:</p>
+<pre class="text"><code>c1201fe48fe45033c9a97e39ff83928e
+683ac1d69703ec31987752f6f7dfaa69</code></pre></li>
+<li><p>Alexander Demin, Alexey Ovchinnikov and Vladimir Shpilrain.
+<em>CHAMP: Cayley HAshing with Matrix Products</em>. Distinct
+twelve-page <a href="https://shpilrain.ccny.cuny.edu/Cayley%20hash%20paper.pdf">author-hosted
+preprint</a>, retrieved 21 September 2026. Version identification only;
+see the scope note above.</p></li>
+<li><p>Ciaran Mullan and Boaz Tsaban. <em>SL2 homomorphic hash
+functions: Worst case to average case reduction and short collision
+search</em>. <a href="https://arxiv.org/abs/1306.5646v3">arXiv:1306.5646v3</a>, 23
+December 2015, especially §4. Journal DOI: <a href="https://doi.org/10.1007/s10623-015-0129-8">10.1007/s10623-015-0129-8</a>.</p></li>
+<li><p>Seiichiro Tani. <em>Claw Finding Algorithms Using Quantum
+Walk</em>. <a href="https://arxiv.org/abs/0708.2584v2">arXiv:0708.2584</a>, version 2,
+3 March 2008, Corollary 9. <em>Theoretical Computer Science</em>
+410(50), 5285–5297 (2009). DOI: <a href="https://doi.org/10.1016/j.tcs.2009.08.030">10.1016/j.tcs.2009.08.030</a>.</p></li>
+<li><p>Gilles Brassard, Peter Høyer and Alain Tapp. <em>Quantum
+Algorithm for the Collision Problem</em>. <a href="https://arxiv.org/abs/quant-ph/9705002">arXiv:quant-ph/9705002</a>,
+1997. <em>LATIN 1998</em>, LNCS 1380, 163–169. DOI: <a href="https://doi.org/10.1007/BFb0054319">10.1007/BFb0054319</a>.</p></li>
+<li><p>NIST. <em>A Statistical Test Suite for Random and Pseudorandom
+Number Generators for Cryptographic Applications</em>. <a href="https://csrc.nist.gov/pubs/sp/800/22/r1/upd1/final">SP 800-22
+Rev. 1a</a>, 2010. DOI: <a href="https://doi.org/10.6028/NIST.SP.800-22r1a">10.6028/NIST.SP.800-22r1a</a>.</p></li>
+<li><p>NIST. <em>Secure Hash Standard</em>. <a href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf">FIPS
+PUB 180-4</a>, August 2015, §5.1. DOI: <a href="https://doi.org/10.6028/NIST.FIPS.180-4">10.6028/NIST.FIPS.180-4</a>.</p></li>
+<li><p>Mounir IDRASSI. <em>CHAMP: technical assessment of the submitted
+specification</em>, accompanying reproducibility package, version 1.0.1,
+22 September 2026. The archive contains the independent model,
+reduced-parameter search, separately implemented certificate verifier,
+parameter proofs and transcripts. SHA-256 file checksums accompany the
+release; they establish file integrity, not authorship or cryptanalytic
+correctness.</p></li>
+<li><p>Markku-Juhani O. Saarinen. <em><a href="https://ngcc.dev/reports/hash-04.html">CHAMP (hash-04)</a></em>.
+ngcc.dev, 21 September 2026; retrieved 22 September 2026.</p></li>
+<li><p>cuihr26 (signed “Tsinghua Hash Lab”). <em><a href="https://list.niccs.org.cn/archives/list/crypthashforum@list.niccs.org.cn/message/QNMIAAKIPHG5FEK7QZEE2ZYBOWQHCZUE/">Re:
+Round1: Public Comment: CHAMP</a></em>. CryptHash Forum, 22 September
+2026; retrieved the same day.</p></li>
+<li><p>Cryptanalysts001 (signed “ISCAS”). <em><a href="https://list.niccs.org.cn/archives/list/crypthashforum@list.niccs.org.cn/message/6LSOFTTMTDWFWWRAZDREDYJNG5NXDVEC/">Re:
+Round1: Public Comment: CHAMP</a></em>. CryptHash Forum, 22 September
+2026; retrieved the same day.</p></li>
+</ol>
+</body>
+</html>

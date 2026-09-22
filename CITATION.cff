@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "Please cite the accompanying report when referring to this review and its evidence."
+title: "CHAMP: technical assessment of the submitted specification"
+authors:
+  - family-names: "IDRASSI"
+    given-names: "Mounir"
+    email: "mounir@amcrypto.jp"
+version: 1.0.1
+date-released: 2026-09-22
+license: MIT
+preferred-citation:
+  type: report
+  authors:
+    - family-names: "IDRASSI"
+      given-names: "Mounir"
+      email: "mounir@amcrypto.jp"
+  title: "CHAMP: technical assessment of the submitted specification"
+  version: 1.0.1
+  year: 2026
+  month: 9
+  date-published: 2026-09-22
+  filename: REPORT.pdf
+  license: CC-BY-4.0
+keywords:
+  - cryptography
+  - cryptanalysis
+  - CHAMP
+  - Cayley hashing
+  - reproducibility

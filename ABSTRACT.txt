@@ -1,0 +1,18 @@
+This report assesses the supplied CHAMP hash-function specification, its four C
+implementations, test vectors and statistical reports. A direct adaptation of a
+subgroup collision-search strategy to the implemented determinant-2 matrix pair
+is derived and demonstrated through twelve reduced-parameter collision pairs,
+with independent integer-product verification. Under explicit mixing assumptions,
+the approach suggests leading full-parameter work factors of 2^64 for CHAMP-512
+and 2^128 for CHAMP-1024, with substantial storage requirements. Full-parameter
+experiments demonstrate arbitrary-message forgery against naive prefix and
+suffix MACs, a three-query attack on a naive sandwich MAC, recovery from related
+prefix digests, and a 40-bit meet-in-the-middle preimage search. The report also
+examines determinant-based range restrictions, generator orders, length and
+growth arguments, a Julia/C encoding discrepancy, marked statistical-test
+results, digest-length handling and initialization behavior. No practical
+full-parameter collision, distinct second preimage, or recovery of a uniformly
+random long input from one digest is claimed. The exact reviewed specification
+is distinguished from the separate author-hosted preprint. Code, complete
+collision certificates, source hashes and recorded transcripts accompany the
+assessment.

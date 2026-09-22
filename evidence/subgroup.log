@@ -1,0 +1,13 @@
+{"p": 65063, "field_bits": 16, "seed": 0, "phase1_samples": 200, "phase2_samples": 439, "samples_over_sqrt_p": 2.5051504666364983, "collision_bits": 1954, "seconds": 0.018907205001596594}
+{"p": 65063, "field_bits": 16, "seed": 1, "phase1_samples": 539, "phase2_samples": 128, "samples_over_sqrt_p": 2.6149223180697097, "collision_bits": 2017, "seconds": 0.017190349000884453}
+{"p": 65063, "field_bits": 16, "seed": 2, "phase1_samples": 355, "phase2_samples": 279, "samples_over_sqrt_p": 2.485548350309139, "collision_bits": 1765, "seconds": 0.016586434001510497}
+{"p": 1048343, "field_bits": 20, "seed": 0, "phase1_samples": 601, "phase2_samples": 1090, "samples_over_sqrt_p": 1.651550690026287, "collision_bits": 4030, "seconds": 0.04958787299983669}
+{"p": 1048343, "field_bits": 20, "seed": 1, "phase1_samples": 1773, "phase2_samples": 1997, "samples_over_sqrt_p": 3.6820497347126566, "collision_bits": 3477, "seconds": 0.09832646300128545}
+{"p": 1048343, "field_bits": 20, "seed": 2, "phase1_samples": 347, "phase2_samples": 2010, "samples_over_sqrt_p": 2.3020135874582843, "collision_bits": 3082, "seconds": 0.06303961799858371}
+{"p": 16774679, "field_bits": 24, "seed": 0, "phase1_samples": 5685, "phase2_samples": 6195, "samples_over_sqrt_p": 2.9006099440349558, "collision_bits": 5131, "seconds": 0.3473262000006798}
+{"p": 16774679, "field_bits": 24, "seed": 1, "phase1_samples": 6950, "phase2_samples": 2274, "samples_over_sqrt_p": 2.2521234110924606, "collision_bits": 5321, "seconds": 0.25777504099824}
+{"p": 16774679, "field_bits": 24, "seed": 2, "phase1_samples": 2565, "phase2_samples": 5442, "samples_over_sqrt_p": 1.9549818031892165, "collision_bits": 4371, "seconds": 0.22771676599950297}
+{"p": 268434263, "field_bits": 28, "seed": 0, "phase1_samples": 2347, "phase2_samples": 28424, "samples_over_sqrt_p": 1.8781169664040773, "collision_bits": 5440, "seconds": 1.0516091760000563}
+{"p": 268434263, "field_bits": 28, "seed": 1, "phase1_samples": 27949, "phase2_samples": 5918, "samples_over_sqrt_p": 2.0670822300609952, "collision_bits": 6883, "seconds": 1.057634278000478}
+{"p": 268434263, "field_bits": 28, "seed": 2, "phase1_samples": 20897, "phase2_samples": 18831, "samples_over_sqrt_p": 2.4248100757629323, "collision_bits": 5773, "seconds": 1.340889465998771}
+PASS: 12 distinct, equal-length reduced-parameter collisions; full parameters NOT searched.

@@ -1,0 +1,903 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  english,
+  11pt,
+  a4paper,
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=23mm]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmainfont[]{DejaVu Serif}
+  \setsansfont[]{DejaVu Sans}
+  \setmonofont[Scale=0.82]{DejaVu Sans Mono}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{\textbf{#1}}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{caption}
+\captionsetup[table]{skip=6pt}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\ifLuaTeX
+\usepackage[bidi=basic,shorthands=off]{babel}
+\else
+\usepackage[bidi=default,shorthands=off]{babel}
+\fi
+\ifPDFTeX
+\else
+\babelfont{rm}[]{DejaVu Serif}
+\fi
+\ifLuaTeX
+  \usepackage{selnolig} % disable illegal ligatures
+\fi
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{needspace}
+\definecolor{reviewblue}{HTML}{174E67}
+\AtBeginDocument{\hypersetup{colorlinks=true,linkcolor=reviewblue,urlcolor=reviewblue,citecolor=reviewblue}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\sffamily CHAMP technical assessment}
+\fancyhead[R]{\small\sffamily Version 1.0.1}
+\fancyfoot[L]{\footnotesize\sffamily Mounir IDRASSI}
+\fancyfoot[R]{\footnotesize\sffamily\thepage}
+\setlength{\headheight}{15pt}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[L]{\footnotesize\sffamily Mounir IDRASSI}\fancyfoot[R]{\footnotesize\sffamily\thepage}\renewcommand{\headrulewidth}{0pt}}
+\titleformat{\section}{\large\sffamily\bfseries\color{reviewblue}}{}{0pt}{}
+\titlespacing*{\section}{0pt}{2.1ex plus 1ex minus .2ex}{1ex}
+\AtBeginEnvironment{longtable}{\small}
+\setlength{\emergencystretch}{3em}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\brokenpenalty=10000
+\predisplaypenalty=10000
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+% fallback for those not using the hyperref driver hyperxmp:
+\makeatletter
+\@ifundefined{xmpquote}{\newcommand{\xmpquote}[1]{#1}}{}
+\makeatother
+\hypersetup{
+  pdftitle={CHAMP: technical assessment of the submitted specification},
+  pdfauthor={Mounir IDRASSI (mounir@amcrypto.jp)},
+  pdflang={en},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{CHAMP: technical assessment of the submitted specification}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{Independent cryptographic review · Version 1.0.1}
+\author{Mounir IDRASSI
+(\href{mailto:mounir@amcrypto.jp}{\nolinkurl{mounir@amcrypto.jp}})}
+\date{22 September 2026}
+
+\begin{document}
+\maketitle
+
+\textbf{Scope and version.} This report assesses the supplied ten-page
+\emph{CHAMP Algorithm Specifications}, its four C implementations, test
+vectors and statistical reports. All references to specification
+sections and pages concern that document. Its SHA-256 is recorded in the
+source inventory and in the references below.
+
+A distinct twelve-page
+\href{https://shpilrain.ccny.cuny.edu/Cayley\%20hash\%20paper.pdf}{author-hosted
+preprint}, retrieved on 21 September 2026, cites Mullan--Tsaban in §6.2.
+The supplied ten-page specification does not. The criticism here
+concerns the absence of an analysis of the subgroup strategy for the
+implemented determinant-2 pair, not a claim that the authors have never
+cited that work. This report is not a comprehensive review of the
+separate preprint; both document hashes are recorded in
+\url{PROVENANCE.md}.
+
+\textbf{Independent preparation.} This review's analysis and experiments
+were completed independently of
+\href{https://ngcc.dev/reports/hash-04.html}{Saarinen's report} and
+comments signed
+\href{https://list.niccs.org.cn/archives/list/crypthashforum@list.niccs.org.cn/message/QNMIAAKIPHG5FEK7QZEE2ZYBOWQHCZUE/}{Tsinghua
+Hash Lab} and
+\href{https://list.niccs.org.cn/archives/list/crypthashforum@list.niccs.org.cn/message/6LSOFTTMTDWFWWRAZDREDYJNG5NXDVEC/}{ISCAS}.
+The author learned of these sources on 22 September 2026, after
+completing the review and reproducibility package. Their citations
+acknowledge overlap. The subgroup method is credited to Mullan--Tsaban
+in §2.
+
+\textbf{Additional contributions.} Relative to the cited sources, the
+independently developed additions are the explicit two-stage subgroup
+search with twelve verified reduced-parameter collision certificates
+(§2); demonstrated prefix/suffix and three-query sandwich MAC forgeries,
+and related-digest recovery (§4); a 40-bit preimage recovery using full
+CHAMP-1024 parameters (§5); and digest-length, initialization and timing
+findings (§7). The determinant bound, collision-search direction,
+identity example, serialization mismatch, statistical rows and KAT
+checks overlap with the cited analyses; see \url{FINDINGS.md}.
+
+\textbf{Recommendation.} The submission does not presently justify
+adoption as a general-purpose cryptographic hash. The main concerns are
+an applicable subgroup collision-search strategy missing from the
+security analysis, complete forgery of several naive keyed
+constructions, substantial restrictions on digest use, and unsupported
+security arguments. The specification and implementations also disagree
+on serialization, and the statistical reports do not support the
+statement that every test passed.
+
+The evidence has important limits: this assessment demonstrates
+full-parameter forgeries against specified MAC constructions and
+recovery of a short preimage, but \textbf{does not exhibit a practical
+full-parameter collision, a distinct second preimage, or recovery of a
+uniformly random long message from one digest}. Collision-cost
+projections below identify their assumptions. The supplied specification
+does not assign explicit numerical work factors to each security
+property; this report does not infer such claims from digest size alone.
+
+\Needspace{5\baselineskip}
+
+\Needspace{10\baselineskip}
+
+\section{1. Construction and independently checked implementation
+behavior}\label{construction-and-independently-checked-implementation-behavior}
+
+\Needspace{6\baselineskip}
+
+Write
+
+\[
+A=\begin{pmatrix}-2&1\\4&-3\end{pmatrix},\qquad
+B=\begin{pmatrix}-5&2\\-6&2\end{pmatrix},\qquad
+M(x_1\ldots x_n)=G_{x_1}\cdots G_{x_n},
+\]
+
+where \(G_0=A\), \(G_1=B\), and arithmetic is modulo \(p\). CHAMP-512
+uses \(p=2^{128}-15449\); CHAMP-1024 uses \(p=2^{256}-36113\). Both
+generators have determinant 2. The digest is \(H(X)=E(M(X))\), where
+\(E\) inverts each nonzero entry, leaves zero unchanged, and serializes
+the entries in column order. On canonical field encodings, \(E\) is a
+publicly invertible bijection. Let \(D=E^{-1}\).
+
+An independent model reproduced all 4,097 short-message vectors for each
+variant and agreed with both the reference and optimized C
+implementations: 8,194 vectors checked against two implementations
+apiece. Eight large all-zero/all-one vectors were independently checked
+by matrix exponentiation. The large DRBG-expanded and million-iteration
+loop vectors were not rerun in this assessment.
+\href{REPRODUCING.md}{Reproduction code and coverage},
+\href{evidence/reproduce-full.log}{run transcript}.
+
+The Julia listing on PDF p.~5 writes each field element in big-endian
+byte order. All four C implementations and the KATs use little-endian
+byte order. Section 5 does not resolve that choice explicitly. This is
+an interoperability defect: even the one-bit message \texttt{1} yields
+different byte strings. The findings below apply under either
+convention; the demonstrations use the C/KAT convention.
+
+\Needspace{5\baselineskip}
+
+\section{2. A subgroup collision-search
+strategy}\label{a-subgroup-collision-search-strategy}
+
+Mullan and Tsaban give a subgroup-based approach to short collisions in
+matrix homomorphic hashes. Their general-case square-root estimate is
+heuristic. It is materially more relevant than inferring an attack
+merely from membership in a previously studied family.
+\href{https://arxiv.org/abs/1306.5646}{Mullan--Tsaban, §4}.
+
+\Needspace{8\baselineskip}
+
+For CHAMP's implemented pair, the following adaptation works directly
+with determinant-2 matrices; no conversion of unequal-length collisions
+from an \(SL_2\) construction is needed. Put
+
+\[
+P=\begin{pmatrix}1&2\\2&3\end{pmatrix},\quad
+P^{-1}AP=\begin{pmatrix}-4&1\\2&-1\end{pmatrix}=C,\quad
+P^{-1}BP=\operatorname{diag}(-1,-2)=F.
+\]
+
+These are integer identities and hold at both full parameter sets.
+Conjugation preserves products and collisions.
+
+\Needspace{7\baselineskip}
+
+First find a positive bitstring \(w\), containing a zero, whose
+conjugated product \(T\) is upper triangular. This can be searched by
+matching projective points
+
+\[
+M(u)^{-1}\infty=M(v)\infty,
+\]
+
+where products in this paragraph use \(C,F\), and \(\infty=[1:0]\). A
+match makes \(M(uv)\) upper triangular. Only the search computation uses
+inverses: the output word is the ordinary positive word \(uv\). There
+are \(p+1\) projective points. If the sampled point distributions mix
+adequately, two lists of approximately \(\sqrt p\) words suffice.
+
+\Needspace{6\baselineskip}
+
+Now multiply the two upper triangular matrices \(F,T\). For
+
+\[
+R=\begin{pmatrix}a&b\\0&d\end{pmatrix},\qquad
+S=\begin{pmatrix}e&f\\0&h\end{pmatrix},
+\]
+
+\Needspace{6\baselineskip}
+
+direct multiplication gives
+
+\[
+RS=SR\quad\Longleftrightarrow\quad f(a-d)=b(e-h).
+\]
+
+\Needspace{10\baselineskip}
+
+For nonzero off-diagonal entries, matching the field value \((a-d)/b\)
+therefore finds commuting products. Diagonal matrices commute with \(F\)
+and can be handled separately. A birthday search on these codes costs
+approximately \(\sqrt p\) samples under a corresponding mixing
+assumption. Expand the two resulting words back into original CHAMP
+bitstrings \(r,s\), and verify \(rs\ne sr\). The resulting collision
+satisfies
+
+\[
+M(rs)=M(sr),\qquad |rs|=|sr|.
+\]
+
+This construction automatically respects the determinant constraint. It
+produces an actual collision, not an identity word or a relation
+requiring inverse letters in the message.
+
+Our \href{code/subgroup.py}{implementation} produced twelve distinct
+equal-length collision pairs at reduced field sizes, using safe primes
+congruent to 7 modulo 8. The three runs at each size used the following
+total sample counts across the two stages:
+
+\Needspace{9\baselineskip}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1700}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5800}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Field bits
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Prime
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Total samples, three seeds
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+16 & 65,063 & 639; 667; 634 \\
+20 & 1,048,343 & 1,691; 3,770; 2,357 \\
+24 & 16,774,679 & 11,880; 9,224; 8,007 \\
+28 & 268,434,263 & 30,771; 33,867; 39,728 \\
+\end{longtable}
+}
+
+Every pair was recomputed with the original generators and finalization.
+A separate verifier recomputed the complete products over the integers
+before reducing modulo each prime; it also confirmed that these
+particular pairs do not collide at either full parameter set. Complete
+messages, digests, seeds and timings are retained in
+\href{data/collisions.json}{collision certificates}. These examples test
+the mechanism; they do not prove its asymptotic cost or full-size mixing
+assumptions.
+
+With words of \(O(\log p)\) symbols at each stage, the demonstrated
+approach suggests \(O(\sqrt p\log p)\) field work, approximately
+\(\sqrt p\) stored records up to polynomial factors, and messages of
+\(O((\log p)^2)\) bits. The leading exponential work factors would be
+\textbf{\(2^{64}\) for CHAMP-512 and \(2^{128}\) for CHAMP-1024},
+subject to those assumptions. These are neither measured full-parameter
+attacks nor established lower bounds. The authors should address this
+strategy explicitly before assigning security levels.
+
+\Needspace{5\baselineskip}
+
+\Needspace{10\baselineskip}
+
+\section{3. What follows unconditionally from the
+determinant}\label{what-follows-unconditionally-from-the-determinant}
+
+\Needspace{6\baselineskip}
+
+For an \(n\)-bit message,
+
+\[
+\det M(X)=2^n\pmod p.
+\]
+
+\Needspace{6\baselineskip}
+
+Consequently, outputs at a fixed length occupy at most
+
+\[
+S=|SL_2(\mathbb F_p)|=p(p^2-1)
+\]
+
+matrices, regardless of which subgroup the generators produce. A proof
+that the generators generate a large group would not imply that every
+matrix in this coset occurs at a particular length.
+
+\Needspace{16\baselineskip}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3000}}
+  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1700}}
+  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1700}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3600}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Result
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+CHAMP-512
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+CHAMP-1024
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Interpretation
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Fixed-length range bound & Less than \(2^{384}\) & Less than \(2^{768}\)
+& Exact counting bound \\
+Classical birthday collision search & \(O(2^{192})\) & \(O(2^{384})\) &
+Generic baseline; choose a domain with at least \(2S\) messages \\
+Some equal-length collision must exist by & 384 input bits & 768 input
+bits & Pigeonhole principle; does not locate the pair \\
+Subgroup collision search & About \(2^{64}\) & About \(2^{128}\) &
+Leading exponential factors only; mixing assumptions from item 2 \\
+\end{longtable}
+}
+
+The first three rows are independent of the subgroup heuristic. The
+birthday row assumes sampling at a length with at least \(2S\) distinct
+possible messages and discarding repeated inputs; it is not a bound for
+a nearly injective short-message domain. The pigeonhole lengths are 384
+and 768, since the range sizes are already strictly smaller than the
+corresponding powers of two.
+
+\Needspace{8\baselineskip}
+
+Let \(q=(p-1)/2\). Proof-enabled primality checks confirmed that both
+\(p,q\) are prime, and excluded every larger candidate safe prime at
+each size. Since \(p\equiv7\pmod8\), 2 has order \(q\). Thus a collision
+implies
+
+\[
+|X|\equiv |Y|\pmod q.
+\]
+
+This is a valid and useful exclusion of different-length collisions
+within a range of width less than \(q\). It does not address same-length
+collision search.
+
+Two corrections are needed in the specification's statements on PDF
+pp.~4--5. Equality gives \(2^{|X|-|Y|}=1\); allowing \(\pm1\) is an
+unnecessarily weak condition, rather than a contradiction. An identity
+word has length divisible by \(q\), not necessarily equal to \(q\) or
+exactly \(2^{255}\).
+
+For CHAMP-1024, \(A^q=I\) and \(q=2^{255}-18057\). The symbolic messages
+\(\epsilon\) and \(0^q\) therefore contradict the literal assertion of
+no different-length collisions with difference less than \(2^{255}\).
+Matrix exponentiation verifies the identity; the enormous message has
+not been expanded, and this is not a practical attack. The correct
+threshold is \(q\).
+
+The two variants must also be distinguished. At 256 field bits,
+\(\operatorname{ord}(A)=q\) and \(\operatorname{ord}(B)=2q\). At 128
+field bits, 17 is a quadratic \textbf{nonresidue}, \(A\) is nonsplit,
+and \(A^q\ne I\), while \(\operatorname{ord}(B)=2q\) still holds. The
+alternative matrix with trace 5 has the same discriminant 17 and the
+same splitting distinction. Arguments requiring split generators
+therefore need separate treatment at the two sizes.
+\href{evidence/parameters.log}{Parameter proofs and transcript}.
+
+The determinant also exposes length modulo \(q\). If the length lies in
+a known interval of width \(L<q\), bounded discrete-log methods recover
+it in \(O(\sqrt L)\) group operations, with an appropriate time--memory
+tradeoff. Testing a proposed length takes a modular exponentiation.
+Unbounded exact length recovery does not follow. Length hiding is an
+application requirement, not a universal hash-function requirement.
+
+\Needspace{5\baselineskip}
+
+\Needspace{10\baselineskip}
+
+\section{4. Exact failures of particular keyed
+constructions}\label{exact-failures-of-particular-keyed-constructions}
+
+\Needspace{6\baselineskip}
+
+The public combination rule is
+
+\[
+H(XY)=E(D(H(X))D(H(Y))).
+\]
+
+\Needspace{7\baselineskip}
+
+For a naive prefix MAC \(t=H(Km)\), one known message--tag pair reveals
+an equivalent key matrix:
+
+\[
+L=D(t)M(m)^{-1}=M(K).
+\]
+
+For any chosen replacement \(m'\), the attacker returns \(E(LM(m'))\).
+This is universal message forgery after one observed tag, without
+recovering the key bits or knowing their length. It works for
+replacements of the same length, so requiring a fixed message length
+does not fix this construction. A suffix MAC \(H(mK)\) fails similarly
+by multiplying by \(M(m)^{-1}\) on the left.
+
+\Needspace{7\baselineskip}
+
+Adding a fixed secret suffix as well as a prefix is insufficient.
+Suppose decoded tags have the form \(T(m)=L M(m)R\). Query tags for
+\(\epsilon,0,1\). Then
+
+\[
+T(0)T(\epsilon)^{-1}=LAL^{-1},\qquad
+T(1)T(\epsilon)^{-1}=LBL^{-1}.
+\]
+
+Multiplying these known conjugated generators according to a new message
+and then multiplying by \(T(\epsilon)\) produces its valid tag. These
+attacks were checked against all four shipped C implementations. These
+constructions are assessed as potential uses of CHAMP, not as MAC
+schemes expressly proposed in the specification. The results are not an
+analysis of HMAC or every possible keyed construction.
+
+\Needspace{6\baselineskip}
+
+For public digests, if \(H(X)\) and \(H(Xb)\) are both disclosed, then
+
+\[
+D(H(X))^{-1}D(H(Xb))=G_b.
+\]
+
+This recovers the appended bit exactly at any prefix length. The
+demonstrations recover all 5,000 bits from 5,001 consecutive digests in
+the independent model and check recovery of bit 5,000 using each C
+implementation. This identifies a confidentiality hazard \textbf{when
+such related digests are published}. Streaming computation itself does
+not require publishing intermediate digests. This attack therefore does
+not refute the distinct single-digest prediction claim in §7.1(2); that
+claim still needs a precise input distribution and security experiment.
+
+Public digest combination also does not, by itself, break commitment
+binding or file integrity against a protected digest. Changing a
+commitment value is not opening the same commitment two ways.
+Recomputing a digest for a modified file does not make it equal an
+authenticated original digest. Any claimed protocol failure must specify
+what the adversary may change and what the verifier trusts.
+
+\Needspace{5\baselineskip}
+
+\Needspace{11\baselineskip}
+
+\section{5. Short-input recovery and preimage-search
+bounds}\label{short-input-recovery-and-preimage-search-bounds}
+
+\Needspace{7\baselineskip}
+
+For a target matrix \(T\) known to hash an \(m\)-bit input, split a
+candidate as \(uv\), with lengths as close as possible to \(m/2\). Store
+\(M(u)\), and look up
+
+\[
+T M(v)^{-1}.
+\]
+
+This finds an \(m\)-bit preimage using \(O(2^{m/2})\) stored values and
+operations up to polynomial factors. It works directly modulo \(p\); no
+lifting to integers or assumption about entry growth is required. Our
+independent implementation recovered a 40-bit input from its CHAMP-1024
+digest in about 6 seconds on the recorded environment. That timing
+describes this run, not a universal practical cutoff. A second
+demonstration succeeds after integer wrap at a reduced prime.
+\href{evidence/reproduce-full.log}{Transcript}.
+
+The distinction from exhaustive guessing is significant: a generic
+random hash of a uniformly chosen 40-bit input normally requires
+searching roughly \(2^{40}\) possibilities. Nevertheless, this example
+does not recover arbitrary 128-bit or long high-entropy inputs in
+practical time.
+
+Integer exposure is a separate observation. Recovering centered matrix
+entries exposes the exact integer product only when all original entries
+lie in \([-\lfloor p/2\rfloor,\lfloor p/2\rfloor]\). Random samples
+cannot establish a universal no-wrap threshold. In particular, all-zero
+inputs leave this interval at \textbf{59 bits for CHAMP-512 and 117 bits
+for CHAMP-1024}, providing a worst-case counterexample to any larger
+universal centered-lifting threshold. Exposure of a matrix is also not
+automatically efficient recovery of its word factorization.
+
+Two further distinctions are essential:
+
+\begin{itemize}
+\tightlist
+\item
+  A preimage algorithm may return the original message. It is not a
+  second-preimage attack unless it finds a different message. All 4,096
+  twelve-bit messages have distinct products at both full parameter sets
+  in our exhaustive check; the meet-in-the-middle search in that domain
+  returns the original. The determinant also excludes different feasible
+  lengths for a second preimage of these targets.
+\item
+  A saturated \(O(\sqrt S)\) target-preimage estimate needs sufficiently
+  long halves and suitably spread forward/backward distributions, so
+  that sampled lists intersect at the target. Range cardinality alone
+  does not prove this estimate for every length or target. A toy success
+  does not supply the missing hypothesis.
+\end{itemize}
+
+Quantum estimates need a specified resource model. In particular, the
+two split searches form a claw-finding problem on domains of size about
+\(2^{m/2}\). Applying Tani's algorithm yields \(O(2^{m/3})\) quantum
+queries to these product functions, with reversible evaluation and
+substantial quantum storage requirements. This is an inference from that
+algorithm, not a tested quantum implementation.
+\href{https://arxiv.org/abs/0708.2584}{Tani, Corollary 9}. Standard BHT
+collision estimates also require their oracle and balance assumptions to
+be stated.
+\href{https://arxiv.org/abs/quant-ph/9705002}{Brassard--Høyer--Tapp}. No
+optimal quantum security level is established here.
+
+\Needspace{5\baselineskip}
+
+\Needspace{12\baselineskip}
+
+\section{6. Statistical appearance, security arguments, and graph
+terminology}\label{statistical-appearance-security-arguments-and-graph-terminology}
+
+\Needspace{8\baselineskip}
+
+A single digest at a known length admits a strong structural test:
+reject noncanonical field words, decode, and test determinant \(2^n\).
+CHAMP always passes. A uniformly random \(4b\)-bit string passes with
+probability exactly
+
+\[
+\frac{p(p^2-1)}{2^{4b}}\approx 2^{-b},\qquad b=\operatorname{bitlength}(p).
+\]
+
+Thus statistical test-suite success would not make these digests behave
+as uniform random outputs. A three-query concatenation test is also
+possible; conditional on two valid decoded outputs, matching their
+encoded product in a fresh random \(k\)-bit oracle response has
+probability \(2^{-k}\). These properties prevent directly transferring a
+random-oracle argument without examining its use of the hash. They do
+not imply that every protocol with a random-oracle proof is insecure.
+
+The supplied NIST reports themselves contain four marked failures:
+
+\Needspace{9\baselineskip}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4000}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Report
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Line
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Marked result
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Primary pair, 512-bit digest & 156 & NonOverlappingTemplate, 95/100 \\
+Primary pair, 1024-bit digest & 63 & NonOverlappingTemplate, 94/100 \\
+Primary pair, 1024-bit digest & 123 & NonOverlappingTemplate, 95/100 \\
+Alternative pair, 512-bit digest & 186 & RandomExcursionsVariant,
+56/60 \\
+\end{longtable}
+}
+
+Exact filenames, source hashes and the four flagged rows are recorded in
+the \href{PROVENANCE.md}{source inventory} and
+\href{data/nist-flagged-rows.json}{row extracts}. The two primary-pair
+reports state a minimum acceptable ordinary-test count of approximately
+96/100. The authors should reconcile these records with the claim that
+all tests passed. Some failures are expected when many statistical tests
+are applied; their presence alone does not prove an exploitable bias.
+More fundamentally, statistical tests cannot replace cryptanalysis.
+\href{https://csrc.nist.gov/pubs/sp/800/22/r1/upd1/final}{NIST SP 800-22
+Rev.~1a}.
+
+Testing 100 streams of \(10^6\) bits uses 12.5 MB. This is compatible
+with generating at least 100 MB and testing a subset. The exact
+generated amount, tested subset, counter encoding and testing procedure
+should be documented.
+
+The length-attack defense on PDF p.~7 does not establish resistance. A
+large canonical representative of \(2^{-1}\) says little about whether
+applying the \textbf{correct} inverse factor recovers a smaller integer
+predecessor. Nor does the sign of an average-matrix eigenvalue control
+the norm of an individual product. Replacing both generators by their
+negatives changes an \(n\)-factor product only by \((-1)^n\), leaving
+every absolute-entry norm unchanged, while reversing the signs of the
+average matrix's eigenvalues. Furthermore,
+\(\mathbb E[M_n]=((A+B)/2)^n\) concerns signed entries, not
+\(\mathbb E[\|M_n\|]\), typical growth, or a predictor's success
+probability. The displayed plots do not supply those missing analyses.
+
+The term \emph{girth} must be defined. A positive collision gives two
+directed paths with a common endpoint, but closing one path by the
+reverse of the other uses inverse edges. It bounds a cycle in the
+underlying undirected graph, not necessarily a directed identity cycle.
+Indeed, for the CHAMP-1024 primary pair the directed girth is exactly
+\(q\): determinants rule out shorter positive identity words, and
+\(A^q=I\) supplies one. This can coexist with same-length collisions
+forced by counting at 768 bits. Neither a large directed girth nor a
+counting upper bound for a different graph resolves the actual
+collision-search problem.
+
+The integer-lifting discussion on PDF p.~6 also needs care with signed
+entries. Two different integers can both have absolute value less than
+\(p\) and still be equal modulo \(p\): 1 and \(1-p\) are an example. A
+sufficient no-aliasing condition is that each coordinate lies in a
+common interval of width less than \(p\), such as the centered interval
+used above. Freeness over the integers and a valid coordinate bound are
+separate requirements for such a modular collision exclusion.
+
+A bounded search without an integer relation does not prove freeness.
+Conversely, lack of a freeness proof is not itself a collision attack. A
+credible security analysis must address the actual parameters and
+message domain.
+
+\Needspace{5\baselineskip}
+
+\section{7. Implementation and feature
+claims}\label{implementation-and-feature-claims}
+
+All four \texttt{CryptHash} implementations ignore
+\texttt{digest\_len\_bits}. For example, asking the CHAMP-1024
+implementation for 512 bits still returns success and writes 1,024 bits.
+A guarded-buffer test confirms this behavior without making an
+out-of-bounds access. The API should reject unsupported lengths and
+document output capacity.
+
+All four implementations lazily initialize global byte tables using an
+unsynchronized ready flag. Concurrent first calls can race on these
+shared objects under the C memory model. This is a source-level finding,
+not a reproduced erroneous digest. Constant tables or properly
+synchronized initialization would remove that concern.
+
+The implementation is not established to be constant-time. Its memory
+accesses use message bytes as table indices, and arithmetic contains
+data-dependent control flow. A public exponent fixes an exponentiation
+schedule, not the timing of every arithmetic operation. Hash inputs may
+be confidential in some applications. No timing or cache attack is
+demonstrated here. Implementations intended for confidential inputs need
+a separate side-channel assessment.
+
+Streaming without knowing the final length is already supported by
+SHA-family hashing: complete blocks can be processed as they arrive and
+padding added at the end. CHAMP's public digest-combination rule is a
+different functionality. The feature comparison in §§2 and 4 should
+distinguish them.
+\href{https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf}{FIPS
+180-4, §5.1}.
+
+The paper's own Table 1 reports lower single-thread throughput than
+SHA-512; exploiting more cores is a separate resource comparison. No new
+throughput benchmark is claimed here. Breaking public homomorphism is
+not a necessary condition for collision resistance, and conventional
+streaming or parallel hashing does not inherently require publishing a
+composable final digest.
+
+\textbf{Requested revisions before reconsideration.} State separate
+collision, preimage and second-preimage targets; specify input
+distributions, message limits and classical/quantum resource models;
+address the subgroup strategy and its mixing assumptions; formalize the
+single-digest bit-prediction claim; limit proposed uses to analyzed
+constructions; correct the determinant statements and serialization;
+reconcile the statistical reports; and repair or document the API and
+concurrency behavior. Any revised finalization must be analyzed as part
+of the construction: simply hashing the matrix again cannot remove
+collisions already present in the matrix product.
+
+The accompanying \href{REPRODUCING.md}{reproduction guide} maps the
+computations to source code, complete collision certificates and
+recorded transcripts. The \href{PROVENANCE.md}{source inventory}
+identifies the exact reviewed inputs and version boundaries. The
+\href{FINDINGS.md}{findings index} separates algebraic results,
+experiments, projections and source-level observations.
+
+\Needspace{8\baselineskip}
+
+\textbf{AI-use disclosure.} Moonshot AI's kimi-k3 was used for the main
+review. OpenAI's GPT-6 Astra was used for polishing and preparing the
+publication package, including additional technical analysis,
+cross-checking of claims, and development of reproducibility code.
+Mounir IDRASSI is responsible for the final report and its conclusions.
+
+\textbf{License.} Copyright © 2026 Mounir IDRASSI for the original
+contributions. This report and its original results are licensed under
+\href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons
+Attribution 4.0 International (CC BY 4.0)}. The accompanying code is
+licensed under the \href{LICENSE}{MIT License}. Third-party material
+retains its existing terms; see \url{LICENSING.md} for the scope.
+
+\Needspace{5\baselineskip}
+
+\section{8. References and
+reproducibility}\label{references-and-reproducibility}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  CHAMP submitters. \emph{CHAMP: Cayley HAshing with Matrix Products ---
+  Algorithm Specifications}. Supplied ten-page specification, undated.
+  Reviewed file: \texttt{CHAMP\ Algorithm\ Specifications.pdf}. SHA-256,
+  split over two lines for readability:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{c1201fe48fe45033c9a97e39ff83928e}
+\NormalTok{683ac1d69703ec31987752f6f7dfaa69}
+\end{Highlighting}
+\end{Shaded}
+\item
+  Alexander Demin, Alexey Ovchinnikov and Vladimir Shpilrain.
+  \emph{CHAMP: Cayley HAshing with Matrix Products}. Distinct
+  twelve-page
+  \href{https://shpilrain.ccny.cuny.edu/Cayley\%20hash\%20paper.pdf}{author-hosted
+  preprint}, retrieved 21 September 2026. Version identification only;
+  see the scope note above.
+\item
+  Ciaran Mullan and Boaz Tsaban. \emph{SL2 homomorphic hash functions:
+  Worst case to average case reduction and short collision search}.
+  \href{https://arxiv.org/abs/1306.5646v3}{arXiv:1306.5646v3}, 23
+  December 2015, especially §4. Journal DOI:
+  \href{https://doi.org/10.1007/s10623-015-0129-8}{\nolinkurl{10.1007/s10623-015-0129-8}}.
+\item
+  Seiichiro Tani. \emph{Claw Finding Algorithms Using Quantum Walk}.
+  \href{https://arxiv.org/abs/0708.2584v2}{arXiv:0708.2584}, version 2,
+  3 March 2008, Corollary 9. \emph{Theoretical Computer Science}
+  410(50), 5285--5297 (2009). DOI:
+  \href{https://doi.org/10.1016/j.tcs.2009.08.030}{\nolinkurl{10.1016/j.tcs.2009.08.030}}.
+\item
+  Gilles Brassard, Peter Høyer and Alain Tapp. \emph{Quantum Algorithm
+  for the Collision Problem}.
+  \href{https://arxiv.org/abs/quant-ph/9705002}{arXiv:quant-ph/9705002},
+  1997. \emph{LATIN 1998}, LNCS 1380, 163--169. DOI:
+  \href{https://doi.org/10.1007/BFb0054319}{\nolinkurl{10.1007/BFb0054319}}.
+\item
+  NIST. \emph{A Statistical Test Suite for Random and Pseudorandom
+  Number Generators for Cryptographic Applications}.
+  \href{https://csrc.nist.gov/pubs/sp/800/22/r1/upd1/final}{SP 800-22
+  Rev.~1a}, 2010. DOI:
+  \href{https://doi.org/10.6028/NIST.SP.800-22r1a}{\nolinkurl{10.6028/NIST.SP.800-22r1a}}.
+\item
+  NIST. \emph{Secure Hash Standard}.
+  \href{https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf}{FIPS
+  PUB 180-4}, August 2015, §5.1. DOI:
+  \href{https://doi.org/10.6028/NIST.FIPS.180-4}{\nolinkurl{10.6028/NIST.FIPS.180-4}}.
+\item
+  Mounir IDRASSI. \emph{CHAMP: technical assessment of the submitted
+  specification}, accompanying reproducibility package, version 1.0.1,
+  22 September 2026. The archive contains the independent model,
+  reduced-parameter search, separately implemented certificate verifier,
+  parameter proofs and transcripts. SHA-256 file checksums accompany the
+  release; they establish file integrity, not authorship or
+  cryptanalytic correctness.
+\item
+  Markku-Juhani O. Saarinen.
+  \emph{\href{https://ngcc.dev/reports/hash-04.html}{CHAMP (hash-04)}}.
+  ngcc.dev, 21 September 2026; retrieved 22 September 2026.
+\item
+  cuihr26 (signed ``Tsinghua Hash Lab'').
+  \emph{\href{https://list.niccs.org.cn/archives/list/crypthashforum@list.niccs.org.cn/message/QNMIAAKIPHG5FEK7QZEE2ZYBOWQHCZUE/}{Re:
+  Round1: Public Comment: CHAMP}}. CryptHash Forum, 22 September 2026;
+  retrieved the same day.
+\item
+  Cryptanalysts001 (signed ``ISCAS'').
+  \emph{\href{https://list.niccs.org.cn/archives/list/crypthashforum@list.niccs.org.cn/message/6LSOFTTMTDWFWWRAZDREDYJNG5NXDVEC/}{Re:
+  Round1: Public Comment: CHAMP}}. CryptHash Forum, 22 September 2026;
+  retrieved the same day.
+\end{enumerate}
+
+\end{document}

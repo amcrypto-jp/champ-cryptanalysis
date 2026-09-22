@@ -1,0 +1,11 @@
+10.9
+field_bits 128 p 340282366920938463463374607431768196007 q 170141183460469231731687303715884098003 both prime with proof=True
+ord(2)=q; ord(B)=2q; 17 square: False
+A^q=I: False B_alt^q=I: False
+A and B_alt are nonsplit; A^(p+1)=2I
+No larger safe prime: 7724 odd candidates checked
+field_bits 256 p 115792089237316195423570985008687907853269984665640564039457584007913129603823 q 57896044618658097711785492504343953926634992332820282019728792003956564801911 both prime with proof=True
+ord(2)=q; ord(B)=2q; 17 square: True
+A^q=I: True B_alt^q=I: False
+ord(A)=q; ord(B_alt)=2q
+No larger safe prime: 18056 odd candidates checked

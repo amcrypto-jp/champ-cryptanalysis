@@ -1,0 +1,24 @@
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{needspace}
+\definecolor{reviewblue}{HTML}{174E67}
+\AtBeginDocument{\hypersetup{colorlinks=true,linkcolor=reviewblue,urlcolor=reviewblue,citecolor=reviewblue}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\sffamily CHAMP technical assessment}
+\fancyhead[R]{\small\sffamily Version 1.0.1}
+\fancyfoot[L]{\footnotesize\sffamily Mounir IDRASSI}
+\fancyfoot[R]{\footnotesize\sffamily\thepage}
+\setlength{\headheight}{15pt}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[L]{\footnotesize\sffamily Mounir IDRASSI}\fancyfoot[R]{\footnotesize\sffamily\thepage}\renewcommand{\headrulewidth}{0pt}}
+\titleformat{\section}{\large\sffamily\bfseries\color{reviewblue}}{}{0pt}{}
+\titlespacing*{\section}{0pt}{2.1ex plus 1ex minus .2ex}{1ex}
+\AtBeginEnvironment{longtable}{\small}
+\setlength{\emergencystretch}{3em}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\brokenpenalty=10000
+\predisplaypenalty=10000

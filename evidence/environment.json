@@ -1,0 +1,11 @@
+{
+  "date": "2026-09-21",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+  "python": "3.14.4",
+  "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+  "sage": "10.9",
+  "cpu": "13th Gen Intel(R) Core(TM) i9-13900HX",
+  "pandoc": "3.11",
+  "tectonic": "0.17.0",
+  "notes": "Wall-clock measurements are single-run demonstrations; CPU scheduling and peak memory were not measured."
+}

@@ -1,0 +1,13 @@
+# Local Python and Sage products.
+__pycache__/
+*.py[cod]
+*.sage.py
+.venv/
+
+# Reproduction runs; retain all distributed evidence/*.log files.
+verification-*/
+/new-collisions.json
+
+# Desktop metadata.
+.DS_Store
+Thumbs.db

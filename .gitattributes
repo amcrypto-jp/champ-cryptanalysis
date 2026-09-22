@@ -1,0 +1,4 @@
+# Preserve the text bytes recorded in SHA256SUMS on all checkout platforms.
+* text=auto eol=lf
+*.pdf binary
+*.zip binary

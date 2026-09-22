@@ -1,0 +1,27 @@
+PASS: 19 reviewed-input SHA-256 values and 4 statistical report rows match
+Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.43 3.14.4
+PARAM CHAMP-512: 17 square=False, A^q=I=False, B^q=-I; all-zero centered lift first fails at 59 bits; pigeonhole at 384 bits
+PARAM CHAMP-1024: 17 square=True, A^q=I=True, B^q=-I; all-zero centered lift first fails at 117 bits; pigeonhole at 768 bits
+CHAMP-512 Model: prefix/suffix arbitrary-message forgery, 3-query sandwich forgery, bit 5000 recovery PASS
+CHAMP-512 Reference: prefix/suffix arbitrary-message forgery, 3-query sandwich forgery, bit 5000 recovery PASS
+C CHAMP-512 Reference: requested 256 digest bits, returned success and wrote 512 bits
+CHAMP-512 Optimized: prefix/suffix arbitrary-message forgery, 3-query sandwich forgery, bit 5000 recovery PASS
+C CHAMP-512 Optimized: requested 256 digest bits, returned success and wrote 512 bits
+MODEL CHAMP-512: recovered all 5000 bits from 5001 consecutive digests PASS
+MODEL CHAMP-512: one-query determinant test PASS; random acceptance p*(p^2-1)/2^512 (approximately 2^-128)
+KAT CHAMP-512: all 4097 short vectors agree with independent model and both C builds; Julia byte-order discrepancy confirmed
+KAT CHAMP-512: 4 long constant-message vectors checked by matrix exponentiation; DRBG and Monte-Carlo vectors NOT rerun
+CHAMP-1024 Model: prefix/suffix arbitrary-message forgery, 3-query sandwich forgery, bit 5000 recovery PASS
+CHAMP-1024 Reference: prefix/suffix arbitrary-message forgery, 3-query sandwich forgery, bit 5000 recovery PASS
+C CHAMP-1024 Reference: requested 512 digest bits, returned success and wrote 1024 bits
+CHAMP-1024 Optimized: prefix/suffix arbitrary-message forgery, 3-query sandwich forgery, bit 5000 recovery PASS
+C CHAMP-1024 Optimized: requested 512 digest bits, returned success and wrote 1024 bits
+MODEL CHAMP-1024: recovered all 5000 bits from 5001 consecutive digests PASS
+MODEL CHAMP-1024: one-query determinant test PASS; random acceptance p*(p^2-1)/2^1024 (approximately 2^-256)
+KAT CHAMP-1024: all 4097 short vectors agree with independent model and both C builds; Julia byte-order discrepancy confirmed
+KAT CHAMP-1024: 4 long constant-message vectors checked by matrix exponentiation; DRBG and Monte-Carlo vectors NOT rerun
+SECOND PREIMAGE CHAMP-512: 4096 distinct 12-bit products; MITM returns the original, no second preimage
+SECOND PREIMAGE CHAMP-1024: 4096 distinct 12-bit products; MITM returns the original, no second preimage
+MITM field_bits=16, input_bits=40: PASS; seconds=2.908; centered_integer_lift_exact=False; target=0011110111011110111010011000111001101011; recovered=0011110111011110111010011000111001101011
+MITM field_bits=256, input_bits=40: PASS; seconds=5.975; centered_integer_lift_exact=True; target=0011110111011110111010011000111001101011; recovered=0011110111011110111010011000111001101011
+PASS: all requested independent checks; elapsed=29.853s

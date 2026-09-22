@@ -1,0 +1,24 @@
+{
+  "description": "Reviewed submission inputs; paths are relative to the original submission root. These third-party files are not redistributed in this package.",
+  "sha256": {
+    "Algorithm specifications/CHAMP Algorithm Specifications.pdf": "c1201fe48fe45033c9a97e39ff83928e683ac1d69703ec31987752f6f7dfaa69",
+    "Implementations and Test_Vectors/API_CryptHash/Implementations/Optimized_Implementation/CHAMP-1024/CryptHash_AlgorithmInstance.c": "6633c6b2ec152266ea311fe8c51324c139608ff685c88651f421706e9c50495a",
+    "Implementations and Test_Vectors/API_CryptHash/Implementations/Optimized_Implementation/CHAMP-512/CryptHash_AlgorithmInstance.c": "5395ee52a5b9b602caff51b85ebdb7a3b28b979d996f8e2e7942d101e0078420",
+    "Implementations and Test_Vectors/API_CryptHash/Implementations/Reference_Implementation/CHAMP-1024/CryptHash_AlgorithmInstance.c": "8952434b9b6a0dc6ecab6e8c5b6ba821198c6049a7c18bd37aaf0f870a74cdb9",
+    "Implementations and Test_Vectors/API_CryptHash/Implementations/Reference_Implementation/CHAMP-512/CryptHash_AlgorithmInstance.c": "4e0aea74105cc7f519ed89f0c746ec69c37fd7c1833fbfaeb62f71a2b6b1fa9e",
+    "Implementations and Test_Vectors/API_CryptHash/Implementations/Optimized_Implementation/CHAMP-1024/CryptHash_AlgorithmInstance.h": "0b3181b842b82713fea38e2ac42c72e22da65178e3e544de80c1ac7dfa08e94d",
+    "Implementations and Test_Vectors/API_CryptHash/Implementations/Optimized_Implementation/CHAMP-512/CryptHash_AlgorithmInstance.h": "a82dd47d28b531b12d3d5887a2255dae5fba40a6b8f094eb1052eb85657c55bb",
+    "Implementations and Test_Vectors/API_CryptHash/Implementations/Reference_Implementation/CHAMP-1024/CryptHash_AlgorithmInstance.h": "0b3181b842b82713fea38e2ac42c72e22da65178e3e544de80c1ac7dfa08e94d",
+    "Implementations and Test_Vectors/API_CryptHash/Implementations/Reference_Implementation/CHAMP-512/CryptHash_AlgorithmInstance.h": "a82dd47d28b531b12d3d5887a2255dae5fba40a6b8f094eb1052eb85657c55bb",
+    "Implementations and Test_Vectors/API_CryptHash/Test_Vectors/KAT_2_12_CHAMP-1024.txt": "7609a32270418bac434daade83837177fbf01984099f9262b18a15a361690d5f",
+    "Implementations and Test_Vectors/API_CryptHash/Test_Vectors/KAT_2_12_CHAMP-512.txt": "7c7744834dd60a6e431664fd06cb6028e880d863c69ef255dd1bc28f2028f285",
+    "Implementations and Test_Vectors/API_CryptHash/Test_Vectors/KAT_2_23_CHAMP-1024.txt": "0daa9be66afdad0663faaf29c0594b5bdcf811c1e15553ef3eae46ce71f94631",
+    "Implementations and Test_Vectors/API_CryptHash/Test_Vectors/KAT_2_23_CHAMP-512.txt": "a2a1ec873ba142cfb599e76e35f0dd7b8fbace17313980b0d85b04c9aed1e633",
+    "Implementations and Test_Vectors/API_CryptHash/Test_Vectors/KAT_2_33_CHAMP-1024.txt": "691e1cf03d53732d0d3cee70d9ffce4751871477520b22dca82edd5fd824bf33",
+    "Implementations and Test_Vectors/API_CryptHash/Test_Vectors/KAT_2_33_CHAMP-512.txt": "1295ffb30a32e0710a64a0fbf0b8f305514d3a09ddd2828fb5b2133f2ea0b1e8",
+    "Others/NIST pseudorandomness tests/report_m214m3_64m2m1_1024.txt": "561ca13a3fb00104a0a40c3ccf154067f92c01c06b3f471dfc28b8edc666a5e1",
+    "Others/NIST pseudorandomness tests/report_m214m3_64m2m1_512.txt": "f23fa6995a0a9823df0f671bc3c33ccf52d01da8550261a42418160f9c53da0f",
+    "Others/NIST pseudorandomness tests/report_m214m3_m52m62_1024.txt": "3a7f801e0192ae92411851509f54efc51429eb1997b0743b198722feaad327ff",
+    "Others/NIST pseudorandomness tests/report_m214m3_m52m62_512.txt": "9b8c5096bef10c5e12c3d29a28e75412e52777327f2c25cfca1e45dd25673847"
+  }
+}

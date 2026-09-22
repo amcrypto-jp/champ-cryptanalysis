@@ -1,0 +1,13 @@
+PASS p=65063, seed=0, length=1954: integer-product verification; not a collision at either full parameter set
+PASS p=65063, seed=1, length=2017: integer-product verification; not a collision at either full parameter set
+PASS p=65063, seed=2, length=1765: integer-product verification; not a collision at either full parameter set
+PASS p=1048343, seed=0, length=4030: integer-product verification; not a collision at either full parameter set
+PASS p=1048343, seed=1, length=3477: integer-product verification; not a collision at either full parameter set
+PASS p=1048343, seed=2, length=3082: integer-product verification; not a collision at either full parameter set
+PASS p=16774679, seed=0, length=5131: integer-product verification; not a collision at either full parameter set
+PASS p=16774679, seed=1, length=5321: integer-product verification; not a collision at either full parameter set
+PASS p=16774679, seed=2, length=4371: integer-product verification; not a collision at either full parameter set
+PASS p=268434263, seed=0, length=5440: integer-product verification; not a collision at either full parameter set
+PASS p=268434263, seed=1, length=6883: integer-product verification; not a collision at either full parameter set
+PASS p=268434263, seed=2, length=5773: integer-product verification; not a collision at either full parameter set
+PASS: independently verified all 12 saved pairs.
