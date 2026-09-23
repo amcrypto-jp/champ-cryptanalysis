@@ -47,11 +47,8 @@ uniformly random long input from a single digest.**
 | [AI_DISCLOSURE.md](AI_DISCLOSURE.md) | AI tools used and their roles in preparing the review |
 | [LICENSING.md](LICENSING.md) | MIT for code; CC BY 4.0 for the report and original results; scope and attribution |
 | [CHANGES.md](CHANGES.md) | Release history and scope of this revision |
-| [GITHUB.md](GITHUB.md) | Repository layout and release publication instructions |
 | [code](code) / [data](data) / [evidence](evidence) | Independent programs, complete certificates and recorded transcripts |
 | [ABSTRACT.txt](ABSTRACT.txt) | Plain-text abstract for a publication or repository submission |
-| [ANNOUNCEMENT.md](ANNOUNCEMENT.md) | Ready-to-paste community announcement |
-| [AUTHOR_LETTER.txt](AUTHOR_LETTER.txt) | Cover letter for the CHAMP authors |
 | [CITATION.cff](CITATION.cff) / [references.bib](references.bib) | Citation metadata and bibliography |
 | [SHA256SUMS](SHA256SUMS) | Checksums of the distributed files |
 
